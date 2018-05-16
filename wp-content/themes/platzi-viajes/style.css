@@ -13,7 +13,7 @@ Tags:         e-commerce, two-columns, left-sidebar, right-sidebar, custom-backg
 */
 
 
-.viaje_label{
+.viaje_label, .ruta_label{
 	float: left;
 	min-width: 220px;
 	font-weight: bold;
