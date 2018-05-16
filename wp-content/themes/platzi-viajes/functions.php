@@ -1,27 +1,5 @@
 <?php
 
-function add_role_viajero()
-{
-
-	remove_role('viajero');
-
-    add_role(
-        'viajero',
-        'viajero',
-        [
-            'read'         => true,
-            'edit_posts'   => true,
-            'upload_files' => true,
-            'publish_posts'=> true,
-            //'delete_posts' => true,
-            //'edit_posts'           => true, // edita posts generales no publicados
-            'edit_published_posts' => true // edita los posts ya publicados
-        ]
-    );
-}
-
-add_action('init', 'add_role_viajero');
-
 function viajes_init() {
     $labels = array(
         'name'              => _x( 'Viajes', 'post type general name', 'your-plugin-textdomain' ),
@@ -46,6 +24,7 @@ function viajes_init() {
         'public'            => true,
         'public_queryable'  => true,
         'show_ui'           => true,
+        'show_in_rest'      => true,
         'show_in_menu'      => true,
         'query_var'         => true,
         'rewrite'           => array( 'slug' => 'viaje' ),
@@ -163,4 +142,57 @@ if(function_exists("register_field_group"))
 		),
 		'menu_order' => 0,
 	));
+}
+
+add_action('rest_api_init', 'register_custom_fields');
+
+function register_custom_fields()
+{
+    register_rest_field(
+        'viaje',
+        'destino',
+        array(
+            'get_callback' => 'show_fields'
+        )
+    );
+    register_rest_field(
+        'viaje',
+        'vacunas_obligatorias',
+        array(
+            'get_callback' => 'show_fields'
+        )
+    );
+    register_rest_field(
+        'viaje',
+        'vacunas_recomendadas',
+        array(
+            'get_callback' => 'show_fields'
+        )
+    );
+    register_rest_field(
+        'viaje',
+        'transporte_local',
+        array(
+            'get_callback' => 'show_fields'
+        )
+    );
+    register_rest_field(
+        'viaje',
+        'peligrosidad',
+        array(
+            'get_callback' => 'show_fields'
+        )
+    );
+    register_rest_field(
+        'viaje',
+        'moneda_local',
+        array(
+            'get_callback' => 'show_fields'
+        )
+    );
+
+}
+
+function show_fields( $object, $field_name, $request ) {
+  return get_post_meta( $object[ 'id' ], $field_name, true );
 }
